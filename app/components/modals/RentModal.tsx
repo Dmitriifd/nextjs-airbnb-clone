@@ -1,5 +1,7 @@
 'use client';
 
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -12,6 +14,7 @@ import Counter from '../inputs/Counter';
 import CategoryInput from '../inputs/CategoryInput';
 import CountrySelect from '../inputs/CountrySelect';
 import { categories } from '../navbar/Categories';
+import ImageUpload from '../inputs/ImageUpload';
 import Heading from '../Heading';
 
 enum STEPS {
@@ -56,6 +59,7 @@ const RentModal = () => {
   const guestCount = watch('guestCount');
   const roomCount = watch('roomCount');
   const bathroomCount = watch('bathroomCount');
+  const imageSrc = watch('imageSrc');
 
   const Map = useMemo(
     () =>
@@ -83,6 +87,7 @@ const RentModal = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data);
+
   };
 
   const actionLabel = useMemo(() => {
@@ -173,6 +178,21 @@ const RentModal = () => {
           value={bathroomCount}
           title='Bathrooms'
           subtitle='How many bathrooms do you have?'
+        />
+      </div>
+    );
+  }
+
+  if (step === STEPS.IMAGES) {
+    bodyContent = (
+      <div className='flex flex-col gap-8'>
+        <Heading
+          title='Add a photo of your place'
+          subtitle='Show guests what your place looks like!'
+        />
+        <ImageUpload
+          onChange={(value) => setCustomValue('imageSrc', value)}
+          value={imageSrc}
         />
       </div>
     );
