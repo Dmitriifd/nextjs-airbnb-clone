@@ -3,13 +3,21 @@
 import { useCallback, useState } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { useRouter } from 'next/navigation';
+import { signOut } from "next-auth/react";
 
 import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
 import MenuItem from './MenuItem';
 import Avatar from '../Avatar';
+import { User } from '@prisma/client';
 
-const UserMenu = () => {
+interface UserMenuProps {
+  currentUser?: User | null
+}
+
+const UserMenu: React.FC<UserMenuProps> = ({
+  currentUser
+}) => {
   const router = useRouter();
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
@@ -79,7 +87,7 @@ const UserMenu = () => {
           '
         >
           <div className='flex flex-col cursor-pointer'>
-            {false ? (
+            {currentUser ? (
               <>
                 <MenuItem
                   label='My trips'
@@ -99,7 +107,7 @@ const UserMenu = () => {
                 />
                 <MenuItem label='Airbnb your home' onClick={() => {}} />
                 <hr />
-                <MenuItem label='Logout' onClick={() => {}} />
+                <MenuItem label='Logout' onClick={() => signOut()} />
               </>
             ) : (
               <>
