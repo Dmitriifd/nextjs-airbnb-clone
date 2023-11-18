@@ -11,6 +11,7 @@ interface IParams {
 }
 
 const ListingPage = async ({ params }: { params: IParams }) => {
+
   const listing = await getListingById(params);
   const currentUser = await getCurrentUser();
 
