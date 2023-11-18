@@ -1,12 +1,20 @@
 import Container from '@/app/components/Container';
+import ListingCard from '@/app/components/listings/ListingCard';
 import EmptyState from '@/app/components/EmptyState';
 
+import getListings, { IListingsParams } from '@/app/actions/getListings';
+import getCurrentUser from '@/app/actions/getCurrentUser';
 import ClientOnly from './components/ClientOnly';
 
-const Home = async () => {
-  const isEmpty = true
+interface HomeProps {
+  searchParams: IListingsParams;
+}
 
-  if (isEmpty) {
+const Home = async ({ searchParams }: HomeProps) => {
+  const listings = await getListings(searchParams);
+  const currentUser = await getCurrentUser();
+
+  if (listings.length === 0) {
     return (
       <ClientOnly>
         <EmptyState showReset />
@@ -30,7 +38,13 @@ const Home = async () => {
             gap-8
           '
         >
-          <div>listings</div>
+          {listings.map((listing) => (
+            <ListingCard
+              currentUser={currentUser}
+              key={listing.id}
+              data={listing}
+            />
+          ))}
         </div>
       </Container>
     </ClientOnly>
